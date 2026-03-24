@@ -3,82 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAMRGY | Portfolio</title>
+    <title>About saammrgy</title>
     <style>
-        /* Modern Dark Background */
+        :root {
+            --bg-color: #000000;
+            --accent-green: #073322;
+            --glass: rgba(7, 51, 34, 0.2);
+            --text-main: #ffffff;
+            --text-dim: #8892b0;
+        }
+
         body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at top right, var(--accent-green), transparent 400px);
+            color: var(--text-main);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: radial-gradient(circle at top right, #1a1a2e, #16213e, #0f3460);
-            color: #fff;
-            height: 100vh;
+            padding: 20px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            overflow: hidden;
         }
 
-        /* Glassmorphism Card */
-        .card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 40px;
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        header {
             text-align: center;
-            width: 350px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        /* Hover Effect */
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(0, 255, 255, 0.3);
+            margin: 50px 0;
         }
 
         h1 {
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            font-size: 2rem;
-            margin-bottom: 10px;
-            background: linear-gradient(to right, #00d2ff, #3a7bd5);
+            font-size: 2.5rem;
+            letter-spacing: -1px;
+            margin: 0;
+            background: linear-gradient(to bottom, #fff, #555);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        p {
-            color: #8892b0;
-            font-size: 0.9rem;
-            line-height: 1.6;
+        /* Glass Cards */
+        .section-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 25px;
-            border: 1px solid #00d2ff;
-            border-radius: 50px;
-            color: #00d2ff;
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .pfp {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-green);
+            background: #222; /* Placeholder if no image */
+        }
+
+        .username {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Video/Post Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .embed-link {
+            display: block;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 12px;
+            color: var(--text-main);
             text-decoration: none;
             transition: 0.3s;
+            text-align: center;
+            font-size: 0.9rem;
         }
 
-        .btn:hover {
-            background: #00d2ff;
-            color: #1a1a2e;
+        .embed-link:hover {
+            background: var(--accent-green);
+            border-color: #00ff88;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .stat-box {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-val {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00ff88;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-dim);
+            font-size: 0.8rem;
         }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>SAAMMRGY</h1>
-        <p>Creative Developer & Technology Enthusiast. Building digital experiences from the ground up.</p>
-        <a href="https://github.com/samrgy" class="btn">View Projects</a>
+    <div class="container">
+        <header>
+            <h1>About saammrgy</h1>
+        </header>
+
+        <div class="section-card">
+            <div class="profile-header">
+                <img src="https://www.tiktok.com/favicon.ico" class="pfp" alt="TikTok PFP">
+                <div class="username">@saamrgy (TikTok)</div>
+            </div>
+            <div class="grid">
+                <a href="https://vt.tiktok.com/ZSu7kPJFP/" target="_blank" class="embed-link">▶ Watch Video 1</a>
+                <a href="https://vt.tiktok.com/ZSu7kGJQj/" target="_blank" class="embed-link">▶ Watch Video 2</a>
+                <a href="https://vt.tiktok.com/ZSu7kcQMg/" target="_blank" class="embed-link">▶ Watch Video 3</a>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="profile-header">
+                <img src="https://www.instagram.com/static/images/ico/favicon.ico/36b3048c44c6.ico" class="pfp" alt="IG PFP">
+                <div class="username">@saammrgy (Instagram)</div>
+            </div>
+            <div class="grid">
+                <a href="https://www.instagram.com/p/DBodLZhg4T3/" target="_blank" class="embed-link">📸 View Recent Post</a>
+                <a href="https://www.instagram.com/p/C-_QNm3ALx7/" target="_blank" class="embed-link">📸 View Style Post</a>
+                <a href="https://www.instagram.com/saammrgy/" target="_blank" class="embed-link">🔗 View Full Profile</a>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="profile-header">
+                <div class="username">AniList Stats</div>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-dim);">My Anime & Manga Journey</p>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <span class="stat-val">100+</span>
+                    <span class="stat-label">Anime Completed</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-val">45</span>
+                    <span class="stat-label">Manga Read</span>
+                </div>
+            </div>
+            <a href="https://anilist.co/user/samrgy/animelist" target="_blank" class="embed-link" style="margin-top: 15px;">📊 Open Full List</a>
+        </div>
+
+        <footer>
+            Built by saammrgy &copy; 2026
+        </footer>
     </div>
 
 </body>
