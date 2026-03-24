@@ -132,7 +132,7 @@
             transform: scale(0.96);
         }
 
-        /* main & secondary pages */
+        /* page visibility */
         .page {
             transition: opacity 0.25s ease;
         }
@@ -140,7 +140,7 @@
             display: none;
         }
 
-        /* original cards & styles */
+        /* reveal animations */
         .reveal {
             opacity: 0;
             transition: all 0.8s cubic-bezier(0.33, 1, 0.68, 1);
@@ -281,15 +281,19 @@
         .delete-msg {
             background: none;
             border: none;
-            color: #ff6670;
+            color: #ff8a8a;
             cursor: pointer;
             font-size: 1rem;
-            opacity: 0.6;
+            opacity: 0.7;
             transition: 0.2s;
+            padding: 4px 8px;
+            border-radius: 20px;
         }
         .delete-msg:hover {
             opacity: 1;
-            transform: scale(1.1);
+            color: #ff4d4d;
+            background: rgba(255,0,0,0.1);
+            transform: scale(1.05);
         }
         .empty-messages {
             text-align: center;
@@ -300,7 +304,7 @@
             font-style: italic;
         }
 
-        /* MODAL (GUI) */
+        /* MODAL GUI */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -446,12 +450,12 @@
             <div class="nav-btn" data-page="secondary">SECONDARY PAGE</div>
         </div>
 
-        <!-- GLOBAL SEND BUTTON (color #073322) -->
+        <!-- GLOBAL SEND BUTTON (#073322) -->
         <div class="send-samr-btn" id="globalSendBtn">
-            ✉️ send samr a massage ✨
+            ✉️ send samr a message ✨
         </div>
 
-        <!-- MAIN PAGE CONTENT (original hub) -->
+        <!-- MAIN PAGE CONTENT -->
         <div id="mainPage" class="page">
             <div class="section-card reveal from-left">
                 <span class="section-title">Projects</span>
@@ -478,7 +482,7 @@
             </div>
         </div>
 
-        <!-- SECONDARY PAGE: رسايل ل سامر (messages board) -->
+        <!-- SECONDARY PAGE: رسايل ل سامر (message board) -->
         <div id="secondaryPage" class="page hidden-page">
             <div class="section-card" style="padding: 20px;">
                 <div class="messages-header">
@@ -486,8 +490,7 @@
                     <button class="secondary-send-btn" id="secondarySendBtn">+ إرسال رسالة</button>
                 </div>
                 <div id="messageListContainer" class="message-list">
-                    <!-- dynamic messages injected -->
-                    <div class="empty-messages">loading whispers...</div>
+                    <div class="empty-messages">✨ لا رسائل بعد... كن أول من يكتب</div>
                 </div>
             </div>
         </div>
@@ -497,7 +500,7 @@
         </footer>
     </div>
 
-    <!-- MODAL GUI for sending message -->
+    <!-- MODAL for sending message -->
     <div id="messageModal" class="modal-overlay">
         <div class="modal-container">
             <h3>✍️ سامر يستمع</h3>
@@ -517,62 +520,75 @@
     <div id="toastNotif" class="toast-msg">✨ message sent</div>
 
     <script>
-        // ---- MESSAGES STORAGE ----
+        // ---------- ADMIN PASSWORD ----------
+        // Change this to any password you like. Only you (admin) can delete messages.
+        const ADMIN_PASSWORD = "samr2025";   // <-- change to your secret password
+        
+        // ---------- MESSAGES STORAGE (NO FAKE DATA) ----------
         let messagesArray = [];
 
-        // Load from localStorage or set default examples
+        // Load from localStorage, if empty start with empty array (no fake messages)
         function loadMessages() {
-            const stored = localStorage.getItem("samr_messages_v2");
-            if(stored) {
-                messagesArray = JSON.parse(stored);
+            const stored = localStorage.getItem("samr_messages_v3");
+            if (stored) {
+                try {
+                    messagesArray = JSON.parse(stored);
+                    if (!Array.isArray(messagesArray)) messagesArray = [];
+                } catch(e) { messagesArray = []; }
             } else {
-                messagesArray = [
-                    { name: "lina", message: "your CPU build blew my mind, absolute genius 🔥", date: "2025-02-18 22:14" },
-                    { name: "youssef", message: "the 16-bit calculator is wild! more redstone pls", date: "2025-02-20 09:32" },
-                    { name: "noor", message: "goodnight punpun edit made me cry, keep creating", date: "2025-02-21 17:45" }
-                ];
+                // No default fake messages – clean start
+                messagesArray = [];
                 saveMessages();
             }
             renderMessageBoard();
         }
 
         function saveMessages() {
-            localStorage.setItem("samr_messages_v2", JSON.stringify(messagesArray));
+            localStorage.setItem("samr_messages_v3", JSON.stringify(messagesArray));
         }
 
+        // Add a new message (anyone can add)
         function addMessage(name, msg) {
-            if(!name.trim() || !msg.trim()) return false;
-            const newMsg = {
-                name: name.trim(),
-                message: msg.trim(),
-                date: new Date().toLocaleString()
+            const trimmedName = name.trim();
+            const trimmedMsg = msg.trim();
+            if (!trimmedName || !trimmedMsg) return false;
+            const newMessage = {
+                name: trimmedName,
+                message: trimmedMsg,
+                date: new Date().toLocaleString(),
+                id: Date.now() + Math.random()  // simple unique id
             };
-            messagesArray.unshift(newMsg); // newest first
+            messagesArray.unshift(newMessage);
             saveMessages();
             renderMessageBoard();
             return true;
         }
 
-        function deleteMessage(index) {
-            if(confirm("delete this message ?")) {
+        // Delete message – requires admin password prompt
+        function deleteMessageWithAuth(index) {
+            const password = prompt("🔐 Admin verification required to delete this message:");
+            if (password === ADMIN_PASSWORD) {
                 messagesArray.splice(index, 1);
                 saveMessages();
                 renderMessageBoard();
-                showToast("🗑️ message erased", "#ff6670");
+                showToast("🗑️ Message deleted", "#ff8a8a");
+            } else if (password !== null) {
+                showToast("❌ Wrong password. Deletion denied.", "#ff6666");
             }
         }
 
+        // Render all messages on the board
         function renderMessageBoard() {
             const container = document.getElementById("messageListContainer");
-            if(!container) return;
-            if(messagesArray.length === 0) {
-                container.innerHTML = `<div class="empty-messages">💬 no messages yet — be the first to send samr something</div>`;
+            if (!container) return;
+            if (messagesArray.length === 0) {
+                container.innerHTML = `<div class="empty-messages">💬 لا رسائل بعد... كن أول من يكتب رسالة لسامر</div>`;
                 return;
             }
             let html = "";
             messagesArray.forEach((msg, idx) => {
                 html += `
-                    <div class="message-card">
+                    <div class="message-card" data-msg-idx="${idx}">
                         <div class="msg-name">
                             <span>💠 ${escapeHtml(msg.name)}</span>
                             <button class="delete-msg" data-index="${idx}">🗑️</button>
@@ -583,28 +599,29 @@
                 `;
             });
             container.innerHTML = html;
-            // attach delete events
+            // Attach delete event listeners to each delete button
             document.querySelectorAll('.delete-msg').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     const index = parseInt(btn.getAttribute('data-index'));
-                    if(!isNaN(index)) deleteMessage(index);
+                    if (!isNaN(index)) deleteMessageWithAuth(index);
                 });
             });
         }
 
         function escapeHtml(str) {
+            if (!str) return '';
             return str.replace(/[&<>]/g, function(m) {
-                if(m === '&') return '&amp;';
-                if(m === '<') return '&lt;';
-                if(m === '>') return '&gt;';
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
                 return m;
             }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
                 return c;
             });
         }
 
-        // ---- MODAL LOGIC ----
+        // ---------- MODAL LOGIC ----------
         const modal = document.getElementById("messageModal");
         const nameInput = document.getElementById("senderName");
         const msgInput = document.getElementById("senderMsg");
@@ -633,24 +650,23 @@
             }, 1800);
         }
 
-        function animateSubmitAndSend() {
-            // simple button animation
-            submitBtn.style.transform = "scale(0.94)";
-            setTimeout(() => { submitBtn.style.transform = ""; }, 120);
+        function handleSendMessage() {
             const nameVal = nameInput.value.trim();
             const msgVal = msgInput.value.trim();
-            if(!nameVal || !msgVal) {
-                showToast("⚠️ both name & message needed", "#ff8866");
+            if (!nameVal || !msgVal) {
+                showToast("⚠️ Both name and message are required", "#ff8866");
                 return false;
             }
             const success = addMessage(nameVal, msgVal);
-            if(success) {
-                showToast("✓ sent to samr's void", "#00ff88");
+            if (success) {
+                showToast("✓ Sent to samr's void", "#00ff88");
                 closeModal();
-                // extra pulse animation on global send button
+                // slight animation on global button
                 const btn = document.getElementById("globalSendBtn");
-                btn.style.transform = "scale(0.97)";
-                setTimeout(() => { btn.style.transform = ""; }, 200);
+                if (btn) {
+                    btn.style.transform = "scale(0.97)";
+                    setTimeout(() => { btn.style.transform = ""; }, 200);
+                }
                 return true;
             }
             return false;
@@ -658,39 +674,52 @@
 
         submitBtn.addEventListener("click", (e) => {
             e.preventDefault();
-            animateSubmitAndSend();
+            handleSendMessage();
         });
 
         globalSend.addEventListener("click", openModal);
-        if(secondarySend) secondarySend.addEventListener("click", openModal);
+        if (secondarySend) secondarySend.addEventListener("click", openModal);
         cancelBtn.addEventListener("click", closeModal);
         modal.addEventListener("click", (e) => {
-            if(e.target === modal) closeModal();
+            if (e.target === modal) closeModal();
         });
 
-        // ---- PAGE NAVIGATION (main / secondary) ----
+        // Optional: Enter key in modal (for convenience)
+        const modalInputs = [nameInput, msgInput];
+        modalInputs.forEach(inp => {
+            inp.addEventListener("keypress", (e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    if (document.activeElement === msgInput && msgInput.value.trim()) {
+                        handleSendMessage();
+                    } else if (document.activeElement === nameInput && nameInput.value.trim()) {
+                        msgInput.focus();
+                    }
+                }
+            });
+        });
+
+        // ---------- PAGE NAVIGATION (main / secondary) ----------
         const mainPageDiv = document.getElementById("mainPage");
         const secondaryPageDiv = document.getElementById("secondaryPage");
         const navBtns = document.querySelectorAll(".nav-btn");
 
         function setActivePage(pageId) {
-            if(pageId === "main") {
+            if (pageId === "main") {
                 mainPageDiv.classList.remove("hidden-page");
                 secondaryPageDiv.classList.add("hidden-page");
-                // re-trigger reveal animations on main (optional)
+                // re-trigger reveal animations on main elements if needed
                 document.querySelectorAll("#mainPage .reveal").forEach(el => {
-                    if(!el.classList.contains("active")) el.classList.add("active");
+                    if (!el.classList.contains("active")) el.classList.add("active");
                 });
             } else {
                 mainPageDiv.classList.add("hidden-page");
                 secondaryPageDiv.classList.remove("hidden-page");
-                renderMessageBoard(); // fresh render when opening
-                // add micro animation for messages
+                renderMessageBoard();  // ensure fresh render when switching
             }
-            // update active nav style
             navBtns.forEach(btn => {
                 const pageVal = btn.getAttribute("data-page");
-                if(pageVal === pageId) btn.classList.add("active");
+                if (pageVal === pageId) btn.classList.add("active");
                 else btn.classList.remove("active");
             });
         }
@@ -698,12 +727,12 @@
         navBtns.forEach(btn => {
             btn.addEventListener("click", () => {
                 const target = btn.getAttribute("data-page");
-                if(target === "main") setActivePage("main");
-                else if(target === "secondary") setActivePage("secondary");
+                if (target === "main") setActivePage("main");
+                else if (target === "secondary") setActivePage("secondary");
             });
         });
 
-        // ---- INTERSECTION OBSERVER for original reveal animations (main) ----
+        // ---------- INTERSECTION OBSERVER for reveal animations (main page only) ----------
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 const rect = entry.target.getBoundingClientRect();
@@ -717,37 +746,31 @@
             });
         }, { threshold: 0.15 });
         document.querySelectorAll('#mainPage .reveal').forEach((el) => { observer.observe(el); });
-        // also header reveal
         const headerReveal = document.querySelector('header.reveal');
-        if(headerReveal) observer.observe(headerReveal);
+        if (headerReveal) observer.observe(headerReveal);
 
-        // force active class on any visible reveal elements after load
+        // force active for any visible reveals after load
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.querySelectorAll('.reveal').forEach(el => {
-                    if(el.getBoundingClientRect().top < window.innerHeight-100) el.classList.add('active');
+                    if (el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add('active');
                 });
             }, 100);
         });
 
-        // hide loader
+        // Hide loader and initialize everything
         window.addEventListener('load', () => {
             const loader = document.getElementById('loader');
             loader.style.opacity = '0';
             setTimeout(() => { loader.style.visibility = 'hidden'; }, 500);
-            loadMessages();
-            // default main page visible, secondary hidden
+            loadMessages();    // load messages (empty initially)
             setActivePage("main");
         });
 
-        // for secondary send via plus button already attached
-        // add escape key closes modal
+        // Escape key closes modal
         document.addEventListener("keydown", (e) => {
-            if(e.key === "Escape" && modal.classList.contains("active")) closeModal();
+            if (e.key === "Escape" && modal.classList.contains("active")) closeModal();
         });
-
-        // also on message sent, if secondary is open, refresh is automatic via addMessage->renderMessageBoard
-        // style adjustment for textarea
     </script>
 </body>
 </html>
