@@ -5,17 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#073322">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>saammrgy | Hub</title>
+    <title>saammrgy | liminal space</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
             --top-green: #073322;
             --bg-black: #000000;
             --neon: #00ff88;
-            --glass: rgba(7, 51, 34, 0.25);
+            --glass: rgba(7, 51, 34, 0.35);
             --text: #ffffff;
+            --deep-forest: #073322;
         }
 
-        /* The 'Void' Killer: This fills the gap when pulling down */
         html {
             background-color: var(--top-green);
             margin: 0;
@@ -23,7 +29,6 @@
         }
 
         body {
-            /* The modern 'little by little' fade */
             background: linear-gradient(180deg, 
                 var(--top-green) 0%, 
                 var(--bg-black) 40dvh, 
@@ -32,7 +37,7 @@
             margin: 0;
             padding: 0;
             color: var(--text);
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             overflow-x: hidden;
             min-height: 100dvh;
         }
@@ -60,29 +65,96 @@
         @keyframes spin { to { transform: rotate(360deg); } }
 
         .container {
-            max-width: 450px;
+            max-width: 520px;
             margin: 0 auto;
-            padding: 40px 20px;
-            /* Room for the iOS 'notch' area */
-            padding-top: calc(40px + env(safe-area-inset-top));
+            padding: 20px 20px 40px;
+            padding-top: calc(30px + env(safe-area-inset-top));
+            position: relative;
         }
 
+        /* navigation pills */
+        .nav-pills {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            margin: 20px 0 24px;
+        }
+        .nav-btn {
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            padding: 8px 22px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #eee;
+        }
+        .nav-btn.active {
+            background: var(--neon);
+            color: #000;
+            border-color: var(--neon);
+            box-shadow: 0 0 12px rgba(0, 255, 136, 0.4);
+        }
+        .nav-btn:hover:not(.active) {
+            border-color: var(--neon);
+            background: rgba(0, 255, 136, 0.15);
+        }
+
+        /* global send button (deep forest) */
+        .send-samr-btn {
+            background: var(--deep-forest);
+            border: 1px solid rgba(0, 255, 136, 0.4);
+            border-radius: 40px;
+            padding: 14px 20px;
+            width: 100%;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.25s;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .send-samr-btn:hover {
+            background: #0b4a30;
+            border-color: var(--neon);
+            transform: scale(0.98);
+            box-shadow: 0 0 15px rgba(0,255,136,0.2);
+        }
+        .send-samr-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* main & secondary pages */
+        .page {
+            transition: opacity 0.25s ease;
+        }
+        .hidden-page {
+            display: none;
+        }
+
+        /* original cards & styles */
         .reveal {
             opacity: 0;
             transition: all 0.8s cubic-bezier(0.33, 1, 0.68, 1);
             will-change: transform, opacity;
         }
-
         .from-left { transform: translateX(-50px); }
         .from-right { transform: translateX(50px); }
         .from-bottom { transform: translateY(30px); }
-
         .reveal.active {
             opacity: 1;
             transform: translate(0, 0) !important;
         }
 
-        header { text-align: center; margin-bottom: 40px; }
+        header { text-align: center; margin-bottom: 24px; }
         .pfp {
             width: 110px; height: 110px;
             border-radius: 50%;
@@ -91,7 +163,6 @@
             object-fit: cover;
             margin-bottom: 15px;
         }
-
         h1 { font-size: 2.6rem; letter-spacing: -2px; margin: 0; font-weight: 800; }
 
         .section-card {
@@ -103,7 +174,6 @@
             padding: 22px;
             margin-bottom: 25px;
         }
-
         .section-title {
             color: var(--neon);
             font-size: 0.75rem;
@@ -113,7 +183,6 @@
             display: block;
             font-weight: 700;
         }
-
         .btn {
             display: flex;
             align-items: center;
@@ -127,101 +196,558 @@
             margin-bottom: 10px;
             transition: 0.3s;
         }
-
         .btn:hover { background: rgba(0, 255, 136, 0.1); border-color: var(--neon); }
-
         .stats-row {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
             margin-bottom: 18px;
         }
-
         .stat-item {
             text-align: center;
             background: rgba(0, 0, 0, 0.25);
             padding: 12px 5px;
             border-radius: 16px;
         }
-
         .stat-num { display: block; font-size: 1.2rem; font-weight: 800; color: var(--neon); }
         .stat-label { font-size: 0.6rem; color: #777; text-transform: uppercase; }
 
+        /* MESSAGES (secondary page) */
+        .messages-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .messages-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, var(--neon));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .secondary-send-btn {
+            background: rgba(0, 255, 136, 0.12);
+            border: 1px solid rgba(0, 255, 136, 0.4);
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .secondary-send-btn:hover {
+            background: rgba(0, 255, 136, 0.3);
+        }
+        .message-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 10px;
+            max-height: 55vh;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .message-card {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(12px);
+            border-left: 3px solid var(--neon);
+            border-radius: 18px;
+            padding: 14px 18px;
+            transition: all 0.2s;
+        }
+        .msg-name {
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: var(--neon);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .msg-text {
+            margin-top: 6px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #ddd;
+            word-break: break-word;
+        }
+        .msg-date {
+            font-size: 0.65rem;
+            color: #6c6f78;
+            margin-top: 8px;
+        }
+        .delete-msg {
+            background: none;
+            border: none;
+            color: #ff6670;
+            cursor: pointer;
+            font-size: 1rem;
+            opacity: 0.6;
+            transition: 0.2s;
+        }
+        .delete-msg:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        .empty-messages {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 32px;
+            color: #aaa;
+            font-style: italic;
+        }
+
+        /* MODAL (GUI) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0.2s, opacity 0.2s;
+        }
+        .modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal-container {
+            background: rgba(7, 51, 34, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--neon);
+            border-radius: 32px;
+            width: 85%;
+            max-width: 380px;
+            padding: 28px 22px;
+            box-shadow: 0 25px 40px rgba(0,0,0,0.5);
+            transform: scale(0.95);
+            transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        .modal-overlay.active .modal-container {
+            transform: scale(1);
+        }
+        .modal-container h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--neon);
+        }
+        .input-group {
+            margin-bottom: 18px;
+        }
+        .input-group input, .input-group textarea {
+            width: 100%;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid rgba(0,255,136,0.4);
+            border-radius: 20px;
+            padding: 14px 16px;
+            color: white;
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: 0.2s;
+        }
+        .input-group textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+        .input-group input:focus, .input-group textarea:focus {
+            outline: none;
+            border-color: var(--neon);
+            box-shadow: 0 0 8px rgba(0,255,136,0.4);
+        }
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .modal-submit {
+            background: var(--neon);
+            border: none;
+            padding: 12px;
+            border-radius: 40px;
+            font-weight: 800;
+            color: #000;
+            flex: 2;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .modal-cancel {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #555;
+            padding: 12px;
+            border-radius: 40px;
+            flex: 1;
+            cursor: pointer;
+        }
+        .modal-submit:active {
+            transform: scale(0.96);
+        }
+        .toast-msg {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--neon);
+            color: #000;
+            font-weight: bold;
+            padding: 10px 24px;
+            border-radius: 60px;
+            z-index: 2100;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+            font-size: 0.9rem;
+            box-shadow: 0 0 15px var(--neon);
+        }
+
         footer {
             text-align: center;
-            padding: 40px;
+            padding: 40px 20px 20px;
             font-size: 0.7rem;
-            color: #333;
+            color: #2a4538;
             letter-spacing: 3px;
             font-weight: 800;
+        }
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon);
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
-
     <div id="loader">
         <div class="spinner"></div>
     </div>
 
     <div class="container">
         <header class="reveal from-bottom">
-            <img src="IMG_5132.png" class="pfp" alt="saammrgy">
+            <img src="IMG_5132.png" class="pfp" alt="saammrgy" onerror="this.src='https://placehold.co/110x110/073322/00ff88?text=S'">
             <h1>saammrgy</h1>
         </header>
 
-        <div class="section-card reveal from-left">
-            <span class="section-title">Projects</span>
-            <a href="https://vt.tiktok.com/ZSu7kPJFP/" target="_blank" class="btn"><span>CPU ON MINECRAFT</span><i>→</i></a>
-            <a href="https://vt.tiktok.com/ZSu7kGJQj/" target="_blank" class="btn"><span>16-BITS CALCULATOR</span><i>→</i></a>
-            <a href="https://vt.tiktok.com/ZSu7kcQMg/" target="_blank" class="btn"><span>8-BITS CALCULATOR</span><i>→</i></a>
+        <!-- NAVIGATION PILLS -->
+        <div class="nav-pills">
+            <div class="nav-btn active" data-page="main">MAIN PAGE</div>
+            <div class="nav-btn" data-page="secondary">SECONDARY PAGE</div>
         </div>
 
-        <div class="section-card reveal from-right">
-            <span class="section-title">Instagram Content</span>
-            <a href="https://www.instagram.com/p/DBodLZhg4T3/" target="_blank" class="btn"><span>boys abyss</span><i>📸</i></a>
-            <a href="https://www.instagram.com/p/C-_QNm3ALx7/" target="_blank" class="btn"><span>goodnight punpun</span><i>📸</i></a>
-            <a href="https://www.instagram.com/saammrgy/" target="_blank" class="btn"><span>full profile</span><i>🔗</i></a>
+        <!-- GLOBAL SEND BUTTON (color #073322) -->
+        <div class="send-samr-btn" id="globalSendBtn">
+            ✉️ send samr a massage ✨
         </div>
 
-        <div class="section-card reveal from-bottom">
-            <span class="section-title">AniList Database</span>
-            <div class="stats-row">
-                <div class="stat-item"><span class="stat-num">112</span><span class="stat-label">Anime</span></div>
-                <div class="stat-item"><span class="stat-num">48</span><span class="stat-label">Manga</span></div>
-                <div class="stat-item"><span class="stat-num">2.5k</span><span class="stat-label">Chapters</span></div>
+        <!-- MAIN PAGE CONTENT (original hub) -->
+        <div id="mainPage" class="page">
+            <div class="section-card reveal from-left">
+                <span class="section-title">Projects</span>
+                <a href="https://vt.tiktok.com/ZSu7kPJFP/" target="_blank" class="btn"><span>CPU ON MINECRAFT</span><i>→</i></a>
+                <a href="https://vt.tiktok.com/ZSu7kGJQj/" target="_blank" class="btn"><span>16-BITS CALCULATOR</span><i>→</i></a>
+                <a href="https://vt.tiktok.com/ZSu7kcQMg/" target="_blank" class="btn"><span>8-BITS CALCULATOR</span><i>→</i></a>
             </div>
-            <a href="https://anilist.co/user/samrgy/animelist" target="_blank" class="btn" style="background: var(--neon); color: #000; border: none; justify-content: center;">
-                <span style="font-weight: 800;">VIEW TRACKER</span>
-            </a>
+            <div class="section-card reveal from-right">
+                <span class="section-title">Instagram Content</span>
+                <a href="https://www.instagram.com/p/DBodLZhg4T3/" target="_blank" class="btn"><span>boys abyss</span><i>📸</i></a>
+                <a href="https://www.instagram.com/p/C-_QNm3ALx7/" target="_blank" class="btn"><span>goodnight punpun</span><i>📸</i></a>
+                <a href="https://www.instagram.com/saammrgy/" target="_blank" class="btn"><span>full profile</span><i>🔗</i></a>
+            </div>
+            <div class="section-card reveal from-bottom">
+                <span class="section-title">AniList Database</span>
+                <div class="stats-row">
+                    <div class="stat-item"><span class="stat-num">112</span><span class="stat-label">Anime</span></div>
+                    <div class="stat-item"><span class="stat-num">48</span><span class="stat-label">Manga</span></div>
+                    <div class="stat-item"><span class="stat-num">2.5k</span><span class="stat-label">Chapters</span></div>
+                </div>
+                <a href="https://anilist.co/user/samrgy/animelist" target="_blank" class="btn" style="background: var(--neon); color: #000; border: none; justify-content: center;">
+                    <span style="font-weight: 800;">VIEW TRACKER</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- SECONDARY PAGE: رسايل ل سامر (messages board) -->
+        <div id="secondaryPage" class="page hidden-page">
+            <div class="section-card" style="padding: 20px;">
+                <div class="messages-header">
+                    <span class="messages-title">📬 رسايل ل سامر</span>
+                    <button class="secondary-send-btn" id="secondarySendBtn">+ إرسال رسالة</button>
+                </div>
+                <div id="messageListContainer" class="message-list">
+                    <!-- dynamic messages injected -->
+                    <div class="empty-messages">loading whispers...</div>
+                </div>
+            </div>
         </div>
 
         <footer>
-            MADE BY SAAMMRGY
+            MADE BY SAAMMRGY // ECHO VOID
         </footer>
     </div>
 
+    <!-- MODAL GUI for sending message -->
+    <div id="messageModal" class="modal-overlay">
+        <div class="modal-container">
+            <h3>✍️ سامر يستمع</h3>
+            <div class="input-group">
+                <input type="text" id="senderName" placeholder="your name" autocomplete="off">
+            </div>
+            <div class="input-group">
+                <textarea id="senderMsg" placeholder="write your message for samr..."></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-submit" id="submitMsgBtn">إرسال →</button>
+                <button class="modal-cancel" id="cancelModalBtn">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastNotif" class="toast-msg">✨ message sent</div>
+
     <script>
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('loader');
-            loader.style.opacity = '0';
-            setTimeout(() => { loader.style.visibility = 'hidden'; }, 500);
+        // ---- MESSAGES STORAGE ----
+        let messagesArray = [];
+
+        // Load from localStorage or set default examples
+        function loadMessages() {
+            const stored = localStorage.getItem("samr_messages_v2");
+            if(stored) {
+                messagesArray = JSON.parse(stored);
+            } else {
+                messagesArray = [
+                    { name: "lina", message: "your CPU build blew my mind, absolute genius 🔥", date: "2025-02-18 22:14" },
+                    { name: "youssef", message: "the 16-bit calculator is wild! more redstone pls", date: "2025-02-20 09:32" },
+                    { name: "noor", message: "goodnight punpun edit made me cry, keep creating", date: "2025-02-21 17:45" }
+                ];
+                saveMessages();
+            }
+            renderMessageBoard();
+        }
+
+        function saveMessages() {
+            localStorage.setItem("samr_messages_v2", JSON.stringify(messagesArray));
+        }
+
+        function addMessage(name, msg) {
+            if(!name.trim() || !msg.trim()) return false;
+            const newMsg = {
+                name: name.trim(),
+                message: msg.trim(),
+                date: new Date().toLocaleString()
+            };
+            messagesArray.unshift(newMsg); // newest first
+            saveMessages();
+            renderMessageBoard();
+            return true;
+        }
+
+        function deleteMessage(index) {
+            if(confirm("delete this message ?")) {
+                messagesArray.splice(index, 1);
+                saveMessages();
+                renderMessageBoard();
+                showToast("🗑️ message erased", "#ff6670");
+            }
+        }
+
+        function renderMessageBoard() {
+            const container = document.getElementById("messageListContainer");
+            if(!container) return;
+            if(messagesArray.length === 0) {
+                container.innerHTML = `<div class="empty-messages">💬 no messages yet — be the first to send samr something</div>`;
+                return;
+            }
+            let html = "";
+            messagesArray.forEach((msg, idx) => {
+                html += `
+                    <div class="message-card">
+                        <div class="msg-name">
+                            <span>💠 ${escapeHtml(msg.name)}</span>
+                            <button class="delete-msg" data-index="${idx}">🗑️</button>
+                        </div>
+                        <div class="msg-text">${escapeHtml(msg.message)}</div>
+                        <div class="msg-date">📅 ${escapeHtml(msg.date)}</div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+            // attach delete events
+            document.querySelectorAll('.delete-msg').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const index = parseInt(btn.getAttribute('data-index'));
+                    if(!isNaN(index)) deleteMessage(index);
+                });
+            });
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>]/g, function(m) {
+                if(m === '&') return '&amp;';
+                if(m === '<') return '&lt;';
+                if(m === '>') return '&gt;';
+                return m;
+            }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+                return c;
+            });
+        }
+
+        // ---- MODAL LOGIC ----
+        const modal = document.getElementById("messageModal");
+        const nameInput = document.getElementById("senderName");
+        const msgInput = document.getElementById("senderMsg");
+        const submitBtn = document.getElementById("submitMsgBtn");
+        const cancelBtn = document.getElementById("cancelModalBtn");
+        const globalSend = document.getElementById("globalSendBtn");
+        const secondarySend = document.getElementById("secondarySendBtn");
+
+        function openModal() {
+            nameInput.value = "";
+            msgInput.value = "";
+            modal.classList.add("active");
+        }
+        function closeModal() {
+            modal.classList.remove("active");
+        }
+
+        function showToast(text, bgColor = "#00ff88") {
+            const toast = document.getElementById("toastNotif");
+            toast.style.backgroundColor = bgColor;
+            toast.style.color = "#000";
+            toast.innerText = text;
+            toast.style.opacity = "1";
+            setTimeout(() => {
+                toast.style.opacity = "0";
+            }, 1800);
+        }
+
+        function animateSubmitAndSend() {
+            // simple button animation
+            submitBtn.style.transform = "scale(0.94)";
+            setTimeout(() => { submitBtn.style.transform = ""; }, 120);
+            const nameVal = nameInput.value.trim();
+            const msgVal = msgInput.value.trim();
+            if(!nameVal || !msgVal) {
+                showToast("⚠️ both name & message needed", "#ff8866");
+                return false;
+            }
+            const success = addMessage(nameVal, msgVal);
+            if(success) {
+                showToast("✓ sent to samr's void", "#00ff88");
+                closeModal();
+                // extra pulse animation on global send button
+                const btn = document.getElementById("globalSendBtn");
+                btn.style.transform = "scale(0.97)";
+                setTimeout(() => { btn.style.transform = ""; }, 200);
+                return true;
+            }
+            return false;
+        }
+
+        submitBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            animateSubmitAndSend();
         });
 
+        globalSend.addEventListener("click", openModal);
+        if(secondarySend) secondarySend.addEventListener("click", openModal);
+        cancelBtn.addEventListener("click", closeModal);
+        modal.addEventListener("click", (e) => {
+            if(e.target === modal) closeModal();
+        });
+
+        // ---- PAGE NAVIGATION (main / secondary) ----
+        const mainPageDiv = document.getElementById("mainPage");
+        const secondaryPageDiv = document.getElementById("secondaryPage");
+        const navBtns = document.querySelectorAll(".nav-btn");
+
+        function setActivePage(pageId) {
+            if(pageId === "main") {
+                mainPageDiv.classList.remove("hidden-page");
+                secondaryPageDiv.classList.add("hidden-page");
+                // re-trigger reveal animations on main (optional)
+                document.querySelectorAll("#mainPage .reveal").forEach(el => {
+                    if(!el.classList.contains("active")) el.classList.add("active");
+                });
+            } else {
+                mainPageDiv.classList.add("hidden-page");
+                secondaryPageDiv.classList.remove("hidden-page");
+                renderMessageBoard(); // fresh render when opening
+                // add micro animation for messages
+            }
+            // update active nav style
+            navBtns.forEach(btn => {
+                const pageVal = btn.getAttribute("data-page");
+                if(pageVal === pageId) btn.classList.add("active");
+                else btn.classList.remove("active");
+            });
+        }
+
+        navBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                const target = btn.getAttribute("data-page");
+                if(target === "main") setActivePage("main");
+                else if(target === "secondary") setActivePage("secondary");
+            });
+        });
+
+        // ---- INTERSECTION OBSERVER for original reveal animations (main) ----
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 const rect = entry.target.getBoundingClientRect();
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
                 } else {
-                    // Stricter check: Only remove if fully out of view
                     if (rect.top > window.innerHeight || rect.bottom < 0) {
                         entry.target.classList.remove('active');
                     }
                 }
             });
         }, { threshold: 0.15 });
+        document.querySelectorAll('#mainPage .reveal').forEach((el) => { observer.observe(el); });
+        // also header reveal
+        const headerReveal = document.querySelector('header.reveal');
+        if(headerReveal) observer.observe(headerReveal);
 
-        document.querySelectorAll('.reveal').forEach((el) => { observer.observe(el); });
+        // force active class on any visible reveal elements after load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.querySelectorAll('.reveal').forEach(el => {
+                    if(el.getBoundingClientRect().top < window.innerHeight-100) el.classList.add('active');
+                });
+            }, 100);
+        });
+
+        // hide loader
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            loader.style.opacity = '0';
+            setTimeout(() => { loader.style.visibility = 'hidden'; }, 500);
+            loadMessages();
+            // default main page visible, secondary hidden
+            setActivePage("main");
+        });
+
+        // for secondary send via plus button already attached
+        // add escape key closes modal
+        document.addEventListener("keydown", (e) => {
+            if(e.key === "Escape" && modal.classList.contains("active")) closeModal();
+        });
+
+        // also on message sent, if secondary is open, refresh is automatic via addMessage->renderMessageBoard
+        // style adjustment for textarea
     </script>
 </body>
 </html>
