@@ -7,7 +7,8 @@
     <style>
         :root {
             --bg-color: #000000;
-            --accent-green: #073322;
+            --accent-green: #073322; /* Your color */
+            --glow-green: #00ff88;
             --glass: rgba(7, 51, 34, 0.2);
             --text-main: #ffffff;
             --text-dim: #8892b0;
@@ -15,14 +16,15 @@
 
         body {
             background-color: var(--bg-color);
-            background-image: radial-gradient(circle at top right, var(--accent-green), transparent 400px);
+            background-image: radial-gradient(circle at top right, var(--accent-green), transparent 600px);
             color: var(--text-main);
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            line-height: 1.6;
         }
 
         .container {
@@ -32,74 +34,120 @@
 
         header {
             text-align: center;
-            margin: 50px 0;
+            margin: 30px 0 20px;
         }
 
         h1 {
-            font-size: 2.5rem;
-            letter-spacing: -1px;
+            font-size: 2.2rem;
+            letter-spacing: -1.5px;
             margin: 0;
-            background: linear-gradient(to bottom, #fff, #555);
+            background: linear-gradient(180deg, #fff, #777);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+
+        /* The Main PFP */
+        .header-pfp {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--accent-green);
+            object-fit: cover;
+            box-shadow: 0 0 20px rgba(0,255,136, 0.1);
+            margin-bottom: 15px;
         }
 
         /* Glass Cards */
         .section-card {
             background: var(--glass);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 24px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+            transition: border-color 0.3s ease;
         }
 
         .profile-header {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .pfp {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 2px solid var(--accent-green);
-            background: #222; /* Placeholder if no image */
+            gap: 12px;
+            margin-bottom: 18px;
         }
 
         .username {
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1rem;
+            letter-spacing: -0.5px;
         }
 
-        /* Video/Post Grid */
-        .grid {
+        /* TikTok Thumbnail Grid */
+        .video-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
         }
 
-        .embed-link {
+        .video-link {
+            display: block;
+            position: relative;
+            text-decoration: none;
+            overflow: hidden;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.3s ease;
+            aspect-ratio: 9 / 16; /* TikTok vertical ratio */
+        }
+
+        .video-link:hover {
+            transform: scale(1.05);
+            border-color: var(--glow-green);
+        }
+
+        .video-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: contrast(1.1) brightness(0.9);
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255,255,255,0.8);
+            font-size: 2.5rem;
+            transition: opacity 0.3s;
+        }
+
+        .video-link:hover .play-overlay {
+            opacity: 0.5;
+        }
+
+        /* Button Action Links */
+        .action-link {
             display: block;
             background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.1);
-            padding: 15px;
+            padding: 14px;
             border-radius: 12px;
             color: var(--text-main);
             text-decoration: none;
-            transition: 0.3s;
+            transition: 0.3s ease;
             text-align: center;
             font-size: 0.9rem;
+            font-weight: 500;
         }
 
-        .embed-link:hover {
+        .action-link:hover {
             background: var(--accent-green);
-            border-color: #00ff88;
+            border-color: var(--glow-green);
+            box-shadow: 0 0 10px rgba(0,255,136,0.1);
         }
 
+        /* AniList Stats */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -116,22 +164,24 @@
 
         .stat-val {
             display: block;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #00ff88;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--glow-green);
+            letter-spacing: -1px;
         }
 
         .stat-label {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             text-transform: uppercase;
+            letter-spacing: 1px;
             color: var(--text-dim);
         }
 
         footer {
             text-align: center;
-            padding: 40px;
+            padding: 30px;
             color: var(--text-dim);
-            font-size: 0.8rem;
+            font-size: 0.7rem;
         }
     </style>
 </head>
@@ -139,30 +189,38 @@
 
     <div class="container">
         <header>
+            <img src="pfp.png" class="header-pfp" alt="saammrgy avatar">
             <h1>About saammrgy</h1>
         </header>
 
         <div class="section-card">
             <div class="profile-header">
-                <img src="https://www.tiktok.com/favicon.ico" class="pfp" alt="TikTok PFP">
                 <div class="username">@saamrgy (TikTok)</div>
             </div>
-            <div class="grid">
-                <a href="https://vt.tiktok.com/ZSu7kPJFP/" target="_blank" class="embed-link">▶ Watch Video 1</a>
-                <a href="https://vt.tiktok.com/ZSu7kGJQj/" target="_blank" class="embed-link">▶ Watch Video 2</a>
-                <a href="https://vt.tiktok.com/ZSu7kcQMg/" target="_blank" class="embed-link">▶ Watch Video 3</a>
+            <div class="video-grid">
+                <a href="https://vt.tiktok.com/ZSu7kPJFP/" target="_blank" class="video-link">
+                    <img src="https://i.ibb.co/3W6qWbH/Screenshot-2024-03-22-at-10-30-22.png" class="video-thumb" alt="TikTok Video 1">
+                    <span class="play-overlay">▶</span>
+                </a>
+                <a href="https://vt.tiktok.com/ZSu7kGJQj/" target="_blank" class="video-link">
+                    <img src="https://i.ibb.co/68hP1yV/Screenshot-2024-03-22-at-10-31-04.png" class="video-thumb" alt="TikTok Video 2">
+                    <span class="play-overlay">▶</span>
+                </a>
+                <a href="https://vt.tiktok.com/ZSu7kcQMg/" target="_blank" class="video-link">
+                    <img src="https://i.ibb.co/c18r5D2/Screenshot-2024-03-22-at-10-31-41.png" class="video-thumb" alt="TikTok Video 3">
+                    <span class="play-overlay">▶</span>
+                </a>
             </div>
         </div>
 
         <div class="section-card">
             <div class="profile-header">
-                <img src="https://www.instagram.com/static/images/ico/favicon.ico/36b3048c44c6.ico" class="pfp" alt="IG PFP">
                 <div class="username">@saammrgy (Instagram)</div>
             </div>
-            <div class="grid">
-                <a href="https://www.instagram.com/p/DBodLZhg4T3/" target="_blank" class="embed-link">📸 View Recent Post</a>
-                <a href="https://www.instagram.com/p/C-_QNm3ALx7/" target="_blank" class="embed-link">📸 View Style Post</a>
-                <a href="https://www.instagram.com/saammrgy/" target="_blank" class="embed-link">🔗 View Full Profile</a>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <a href="https://www.instagram.com/p/DBodLZhg4T3/" target="_blank" class="action-link">📸 View Style Post (DBodLZhg)</a>
+                <a href="https://www.instagram.com/p/C-_QNm3ALx7/" target="_blank" class="action-link">📸 View Style Post (C-_QNm3)</a>
+                <a href="https://www.instagram.com/saammrgy/" target="_blank" class="action-link">🔗 View Full Profile</a>
             </div>
         </div>
 
@@ -170,7 +228,6 @@
             <div class="profile-header">
                 <div class="username">AniList Stats</div>
             </div>
-            <p style="font-size: 0.8rem; color: var(--text-dim);">My Anime & Manga Journey</p>
             <div class="stats-grid">
                 <div class="stat-box">
                     <span class="stat-val">100+</span>
@@ -181,11 +238,11 @@
                     <span class="stat-label">Manga Read</span>
                 </div>
             </div>
-            <a href="https://anilist.co/user/samrgy/animelist" target="_blank" class="embed-link" style="margin-top: 15px;">📊 Open Full List</a>
+            <a href="https://anilist.co/user/samrgy/animelist" target="_blank" class="action-link" style="margin-top: 15px;">📊 Open Full List</a>
         </div>
 
         <footer>
-            Built by saammrgy &copy; 2026
+            Created for saammrgy &bull; 2026
         </footer>
     </div>
 
