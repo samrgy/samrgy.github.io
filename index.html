@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMRGY | Portfolio</title>
+    <style>
+        /* Modern Dark Background */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(circle at top right, #1a1a2e, #16213e, #0f3460);
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Glassmorphism Card */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            width: 350px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Hover Effect */
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        h1 {
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            color: #8892b0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 25px;
+            border: 1px solid #00d2ff;
+            border-radius: 50px;
+            color: #00d2ff;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #00d2ff;
+            color: #1a1a2e;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>SAAMMRGY</h1>
+        <p>Creative Developer & Technology Enthusiast. Building digital experiences from the ground up.</p>
+        <a href="https://github.com/samrgy" class="btn">View Projects</a>
+    </div>
+
+</body>
+</html>
