@@ -15,21 +15,31 @@
             --text: #ffffff;
         }
 
-        /* Fills the gap when pulling down at the top */
+        /* 
+          BASE BACKGROUND (ONLY this part is modified):
+          Upper half = #073322, bottom half = solid black.
+          Fixed to viewport → top half of screen always green, bottom half black.
+          Overscroll / pull-down area matches the top green.
+        */
         html {
-            background-color: var(--top-green);
+            background-color: var(--top-green);   /* matches upper half for pull-to-refresh zone */
             margin: 0;
             padding: 0;
         }
 
         body {
-            /* SHARP SPLIT: Upper half green, Bottom half black */
+            /* 
+              ★ HARD SPLIT: top 50% green, bottom 50% black 
+              background-attachment: fixed → split stays fixed relative to window
+              This is the ONLY change to the base background.
+            */
             background: linear-gradient(180deg, 
                 var(--top-green) 0%, 
                 var(--top-green) 50%, 
                 var(--bg-black) 50%, 
                 var(--bg-black) 100%);
             background-attachment: fixed;
+            background-repeat: no-repeat;
             margin: 0;
             padding: 0;
             color: var(--text);
@@ -38,6 +48,7 @@
             min-height: 100dvh;
         }
 
+        /* ——— everything below is untouched (faded backgrounds, cards, loader, etc.) ——— */
         #loader {
             position: fixed;
             top: 0; left: 0;
@@ -94,6 +105,7 @@
 
         h1 { font-size: 2.6rem; letter-spacing: -2px; margin: 0; font-weight: 800; }
 
+        /* FADED BACKGROUND (glass cards) — completely untouched */
         .section-card {
             background: var(--glass);
             backdrop-filter: blur(20px);
